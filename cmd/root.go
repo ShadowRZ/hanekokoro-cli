@@ -1,17 +1,20 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	//"github.com/fatih/color"
 )
+
+var bold = color.New(color.Bold)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "hanekokoro-cli",
 	Short: "Hanekokoro CLI",
-	Long:  "Kinda kitchen sink for something I might wrote?",
+	Long:  "Hanekokoro CLI\nKinda kitchen sink for something I might wrote?",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -26,5 +29,82 @@ func Execute() {
 	}
 }
 
+const (
+	helpCommandName = "help"
+)
+
 func init() {
+	rootCmd.SetUsageFunc(func(c *cobra.Command) error {
+		w := c.OutOrStderr()
+
+		bold.Fprint(w, "USAGE")
+		bold.Fprintf(w, "\n  %s", c.CommandPath())
+		if c.Runnable() {
+			fmt.Fprint(w, " [flags]")
+		}
+		if c.HasAvailableSubCommands() {
+			fmt.Fprint(w, " [command]")
+		}
+		if len(c.Aliases) > 0 {
+			bold.Fprintf(w, "\n\nALIASES\n")
+			fmt.Fprintf(w, "  %s", c.NameAndAliases())
+		}
+		if c.HasExample() {
+			bold.Fprintf(w, "\n\nEXAMPLES\n")
+			fmt.Fprintf(w, "%s", c.Example)
+		}
+		if c.HasAvailableSubCommands() {
+			cmds := c.Commands()
+			if len(c.Groups()) == 0 {
+				bold.Fprintf(w, "\n\nAVALIABLE COMMANDS")
+				for _, subcmd := range cmds {
+					if subcmd.IsAvailableCommand() || subcmd.Name() == helpCommandName {
+						bold.Fprintf(w, "\n  %s ", rpad(subcmd.Name(), subcmd.NamePadding()))
+						fmt.Fprint(w, subcmd.Short)
+					}
+				}
+			} else {
+				for _, group := range c.Groups() {
+					bold.Fprintf(w, "\n\n%s", group.Title)
+					for _, subcmd := range cmds {
+						if subcmd.GroupID == group.ID && (subcmd.IsAvailableCommand() || subcmd.Name() == helpCommandName) {
+							bold.Fprintf(w, "\n  %s ", rpad(subcmd.Name(), subcmd.NamePadding()))
+							fmt.Fprint(w, subcmd.Short)
+						}
+					}
+				}
+				if !c.AllChildCommandsHaveGroup() {
+					fmt.Fprintf(w, "\n\nADDITIONAL COMMANDS")
+					for _, subcmd := range cmds {
+						if subcmd.GroupID == "" && (subcmd.IsAvailableCommand() || subcmd.Name() == helpCommandName) {
+							bold.Fprintf(w, "\n  %s ", rpad(subcmd.Name(), subcmd.NamePadding()))
+							fmt.Fprint(w, subcmd.Short)
+						}
+					}
+				}
+			}
+		}
+		if c.HasAvailableLocalFlags() {
+			bold.Fprintf(w, "\n\nFLAGS\n")
+			fmt.Fprint(w, trimRightSpace(c.LocalFlags().FlagUsages()))
+		}
+		if c.HasAvailableInheritedFlags() {
+			bold.Fprintf(w, "\n\nGLOBAL FLAGS\n")
+			fmt.Fprint(w, trimRightSpace(c.InheritedFlags().FlagUsages()))
+		}
+		if c.HasHelpSubCommands() {
+			fmt.Fprintf(w, "\n\nADDITIONAL HELP TOPICS")
+			for _, subcmd := range c.Commands() {
+				if subcmd.IsAdditionalHelpTopicCommand() {
+					bold.Fprintf(w, "\n  %s ", rpad(subcmd.Name(), subcmd.NamePadding()))
+					fmt.Fprint(w, subcmd.Short)
+				}
+			}
+		}
+		if c.HasAvailableSubCommands() {
+			fmt.Fprintf(w, "\n\nUse \"%s [command] --help\" for more information about a command.", c.CommandPath())
+		}
+		fmt.Fprintln(w)
+		return nil
+	})
 }
