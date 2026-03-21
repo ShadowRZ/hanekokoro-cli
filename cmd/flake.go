@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/ShadowRZ/hanekokoro-cli/internal/cmd/flake"
 	"github.com/spf13/cobra"
 )
 
@@ -17,22 +18,17 @@ These commands support the following mechanisms for input pinning:
 
 Other types comming soon!`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("flake called")
+		flake.FlakeShow()
 	},
 }
 
 // flakeCmd represents the flake show command
 var flakeShowCmd = &cobra.Command{
 	Use:   "show",
-	Short: "Inspect Nix Flakes (or other types of input pinning)",
-	Long: `Inspect Nix Flakes (or other types of input pinning)
-
-These commands support the following mechanisms for input pinning:
- * Nix Flakes (flake.nix, flake.lock)
-
-Other types comming soon!`,
+	Short: "Show outputs",
+	Long:  `Show all output attributes provided by the Nix project.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("flake called")
+		fmt.Println("show called")
 	},
 }
 

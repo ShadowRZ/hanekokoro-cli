@@ -1,4 +1,4 @@
-package cmd
+package utils
 
 import (
 	"fmt"
@@ -7,11 +7,11 @@ import (
 )
 
 // rpad adds padding to the right of a string.
-func rpad(s string, padding int) string {
+func Rpad(s string, padding int) string {
 	formattedString := fmt.Sprintf("%%-%ds", padding)
 	return fmt.Sprintf(formattedString, s)
 }
 
-func trimRightSpace(s string) string {
+func TrimRightSpace(s string) string {
 	return strings.TrimRightFunc(s, unicode.IsSpace)
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ShadowRZ/hanekokoro-cli/internal/utils"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
@@ -59,7 +60,7 @@ func init() {
 				bold.Fprintf(w, "\n\nAVALIABLE COMMANDS")
 				for _, subcmd := range cmds {
 					if subcmd.IsAvailableCommand() || subcmd.Name() == helpCommandName {
-						bold.Fprintf(w, "\n  %s ", rpad(subcmd.Name(), subcmd.NamePadding()))
+						bold.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
 						fmt.Fprint(w, subcmd.Short)
 					}
 				}
@@ -68,7 +69,7 @@ func init() {
 					bold.Fprintf(w, "\n\n%s", group.Title)
 					for _, subcmd := range cmds {
 						if subcmd.GroupID == group.ID && (subcmd.IsAvailableCommand() || subcmd.Name() == helpCommandName) {
-							bold.Fprintf(w, "\n  %s ", rpad(subcmd.Name(), subcmd.NamePadding()))
+							bold.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
 							fmt.Fprint(w, subcmd.Short)
 						}
 					}
@@ -77,7 +78,7 @@ func init() {
 					fmt.Fprintf(w, "\n\nADDITIONAL COMMANDS")
 					for _, subcmd := range cmds {
 						if subcmd.GroupID == "" && (subcmd.IsAvailableCommand() || subcmd.Name() == helpCommandName) {
-							bold.Fprintf(w, "\n  %s ", rpad(subcmd.Name(), subcmd.NamePadding()))
+							bold.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
 							fmt.Fprint(w, subcmd.Short)
 						}
 					}
@@ -86,17 +87,17 @@ func init() {
 		}
 		if c.HasAvailableLocalFlags() {
 			bold.Fprintf(w, "\n\nFLAGS\n")
-			fmt.Fprint(w, trimRightSpace(c.LocalFlags().FlagUsages()))
+			fmt.Fprint(w, utils.TrimRightSpace(c.LocalFlags().FlagUsages()))
 		}
 		if c.HasAvailableInheritedFlags() {
 			bold.Fprintf(w, "\n\nGLOBAL FLAGS\n")
-			fmt.Fprint(w, trimRightSpace(c.InheritedFlags().FlagUsages()))
+			fmt.Fprint(w, utils.TrimRightSpace(c.InheritedFlags().FlagUsages()))
 		}
 		if c.HasHelpSubCommands() {
 			fmt.Fprintf(w, "\n\nADDITIONAL HELP TOPICS")
 			for _, subcmd := range c.Commands() {
 				if subcmd.IsAdditionalHelpTopicCommand() {
-					bold.Fprintf(w, "\n  %s ", rpad(subcmd.Name(), subcmd.NamePadding()))
+					bold.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
 					fmt.Fprint(w, subcmd.Short)
 				}
 			}
