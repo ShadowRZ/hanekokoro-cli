@@ -17,7 +17,7 @@ These commands support the following mechanisms for input pinning:
 Other types comming soon!`,
 }
 
-// flakeCmd represents the flake show command
+// flakeShowCmd represents the flake show command
 var flakeShowCmd = &cobra.Command{
 	Use:   "show",
 	Short: "Show outputs",

@@ -15,7 +15,7 @@ import (
 var bold = color.New(color.Bold)
 
 func FlakeShow() {
-	pwd, err := os.Getwd()
+	pwd, err := utils.RootDir()
 	if err != nil {
 		format.Errorf("Failed to determine current directory: %s", err.Error())
 		return
