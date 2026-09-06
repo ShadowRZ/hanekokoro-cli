@@ -108,9 +108,7 @@ func init() {
 			}
 		}
 		bold.Fprintf(w, "\n\nLEARN MORE\n")
-		if c.HasAvailableSubCommands() {
-			fmt.Fprintf(w, "  Use `%s <command> <subcommand> --help` for more information about a command.", c.Root().CommandPath())
-		}
+		fmt.Fprintf(w, "  Use `%s <command> <subcommand> --help` for more information about a command.", c.Root().CommandPath())
 		fmt.Fprintln(w)
 		return nil
 	})
