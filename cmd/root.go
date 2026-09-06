@@ -10,12 +10,13 @@ import (
 )
 
 var bold = color.New(color.Bold)
+var boldCyan = color.New(color.FgCyan, color.Bold)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "hanekokoro-cli",
+	Use:   "hanekokoro",
 	Short: "Hanekokoro CLI",
-	Long:  "Hanekokoro CLI\nKinda kitchen sink for something I might wrote?",
+	Long:  "@ShadowRZ's Nix/NixOS/Nixpkgs helpers",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -35,11 +36,15 @@ const (
 )
 
 func init() {
+	// Make Help a global flag instead of local (overrides Cobra builtin behaviour)
+	rootCmd.PersistentFlags().BoolP("help", "h", false, "Show help for command")
+
+	// Customize UsageFunc
 	rootCmd.SetUsageFunc(func(c *cobra.Command) error {
 		w := c.OutOrStderr()
 
 		bold.Fprint(w, "USAGE")
-		bold.Fprintf(w, "\n  %s", c.CommandPath())
+		boldCyan.Fprintf(w, "\n  %s", c.CommandPath())
 		if c.Runnable() {
 			fmt.Fprint(w, " [flags]")
 		}
@@ -60,7 +65,7 @@ func init() {
 				bold.Fprintf(w, "\n\nAVALIABLE COMMANDS")
 				for _, subcmd := range cmds {
 					if subcmd.IsAvailableCommand() || subcmd.Name() == helpCommandName {
-						bold.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
+						boldCyan.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
 						fmt.Fprint(w, subcmd.Short)
 					}
 				}
@@ -69,7 +74,7 @@ func init() {
 					bold.Fprintf(w, "\n\n%s", group.Title)
 					for _, subcmd := range cmds {
 						if subcmd.GroupID == group.ID && (subcmd.IsAvailableCommand() || subcmd.Name() == helpCommandName) {
-							bold.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
+							boldCyan.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
 							fmt.Fprint(w, subcmd.Short)
 						}
 					}
@@ -78,7 +83,7 @@ func init() {
 					fmt.Fprintf(w, "\n\nADDITIONAL COMMANDS")
 					for _, subcmd := range cmds {
 						if subcmd.GroupID == "" && (subcmd.IsAvailableCommand() || subcmd.Name() == helpCommandName) {
-							bold.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
+							boldCyan.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
 							fmt.Fprint(w, subcmd.Short)
 						}
 					}
@@ -97,13 +102,14 @@ func init() {
 			fmt.Fprintf(w, "\n\nADDITIONAL HELP TOPICS")
 			for _, subcmd := range c.Commands() {
 				if subcmd.IsAdditionalHelpTopicCommand() {
-					bold.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
+					boldCyan.Fprintf(w, "\n  %s ", utils.Rpad(subcmd.Name(), subcmd.NamePadding()))
 					fmt.Fprint(w, subcmd.Short)
 				}
 			}
 		}
+		bold.Fprintf(w, "\n\nLEARN MORE\n")
 		if c.HasAvailableSubCommands() {
-			fmt.Fprintf(w, "\n\nUse \"%s [command] --help\" for more information about a command.", c.CommandPath())
+			fmt.Fprintf(w, "  Use `%s <command> <subcommand> --help` for more information about a command.", c.Root().CommandPath())
 		}
 		fmt.Fprintln(w)
 		return nil
