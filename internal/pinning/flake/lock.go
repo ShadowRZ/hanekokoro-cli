@@ -6,7 +6,11 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"os"
 	"os/exec"
+	"strings"
+
+	"github.com/savioxavier/termlink"
 )
 
 // Represents flake.lock content.
@@ -54,18 +58,47 @@ type Locked struct {
 	Repo         string `json:"repo"`
 	Rev          string `json:"rev"`
 	Type         string `json:"type"`
+	Url          string `json:"url"`
+	Dir          string `json:"dir"`
 }
 
 func (locked *Locked) Print() {
-	fmt.Printf("%s:%s/%s/%s", locked.Type, locked.Owner, locked.Repo, locked.Rev)
+	locked.Fprint(os.Stdout)
 }
 
 func (locked *Locked) Fprint(w io.Writer) {
-	fmt.Fprintf(w, "%s:%s/%s/%s", locked.Type, locked.Owner, locked.Repo, locked.Rev)
+	linkable := termlink.SupportsHyperlinks()
+	switch locked.Type {
+	case "tarball":
+		fmt.Fprint(w, locked.Url)
+	case "github":
+		var outfmt strings.Builder
+		fmt.Fprintf(&outfmt, "%s:%s/%s/%s", locked.Type, locked.Owner, locked.Repo, locked.Rev)
+		if locked.Dir != "" {
+			fmt.Fprintf(&outfmt, "?dir=%s", locked.Dir)
+		}
+		if linkable {
+			fmt.Fprint(w, termlink.Link(outfmt.String(), fmt.Sprintf("https://github.com/%s/%s/commit/%s", locked.Owner, locked.Repo, locked.Rev)))
+		}
+	case "gitlab":
+		var outfmt strings.Builder
+		fmt.Fprintf(&outfmt, "%s:%s/%s/%s", locked.Type, locked.Owner, locked.Repo, locked.Rev)
+		if locked.Dir != "" {
+			fmt.Fprintf(&outfmt, "?dir=%s", locked.Dir)
+		}
+		if linkable {
+			fmt.Fprint(w, termlink.Link(outfmt.String(), fmt.Sprintf("https://gitlab.com/%s/%s/-/commit/%s", locked.Owner, locked.Repo, locked.Rev)))
+		}
+	default:
+		fmt.Fprintf(w, "%s:%s/%s/%s", locked.Type, locked.Owner, locked.Repo, locked.Rev)
+	}
 }
 
 func (locked *Locked) Sprint() string {
-	return fmt.Sprintf("%s:%s/%s/%s", locked.Type, locked.Owner, locked.Repo, locked.Rev)
+	var ret strings.Builder
+	locked.Fprint(&ret)
+
+	return ret.String()
 }
 
 type Original struct {
@@ -73,6 +106,8 @@ type Original struct {
 	Repo  string `json:"repo"`
 	Ref   string `json:"ref"`
 	Type  string `json:"type"`
+	Url   string `json:"url"`
+	Dir   string `json:"dir"`
 }
 
 func parseFlakeLock(text []byte) (FlakeLock, error) {
