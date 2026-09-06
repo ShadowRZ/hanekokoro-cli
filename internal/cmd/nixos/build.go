@@ -66,7 +66,7 @@ func BuildFlake(
 		finalArgs = append(
 			finalArgs,
 			"--extra-experimental-features",
-			"nix-commands flakes",
+			"nix-command flakes",
 		)
 	}
 
