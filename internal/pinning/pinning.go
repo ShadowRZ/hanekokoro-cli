@@ -1,5 +1,10 @@
 package pinning
 
+import (
+	"os"
+	"path"
+)
+
 type Pinning int
 
 const (
@@ -10,3 +15,13 @@ const (
 	// Unknown types of pinning
 	Unknown
 )
+
+func CheckPinning(root string) Pinning {
+	flakeLock := path.Join(root, "flake.lock")
+
+	if _, err := os.Stat(flakeLock); err == nil {
+		return Flake
+	}
+
+	return Unknown
+}
