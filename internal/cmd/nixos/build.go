@@ -44,7 +44,7 @@ func BuildConfiguration(root string, ty pinning.Pinning) (string, error) {
 			true,
 		)
 		if err != nil {
-			return "", fmt.Errorf("Failed to determine built configuration path: %w", err)
+			return "", fmt.Errorf("Failed to build configuration: %w", err)
 		}
 
 		if outPath == "" {

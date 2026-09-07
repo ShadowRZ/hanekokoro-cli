@@ -108,5 +108,5 @@ func BuildFlake(
 	cmd.Stderr = os.Stderr
 	outPath, err := cmd.Output()
 
-	return strings.TrimSpace(string(outPath)), err
+	return strings.TrimSpace(string(outPath)), fmt.Errorf("Run command failed: %w", err)
 }
