@@ -28,3 +28,25 @@ func RootDir() (string, error) {
 
 	return strings.TrimSpace(string(pwd)), nil
 }
+
+// Run a command, without capturing any outputs.
+func RunCmd(name string, arg ...string) error {
+	cmd := exec.Command(name, arg...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+
+	err := cmd.Start()
+	if err != nil {
+		return err
+	}
+
+	return cmd.Wait()
+}
+
+// Run a command, capturing stdout.
+func RunCmdCaptured(name string, arg ...string) (stdout []byte, err error) {
+	cmd := exec.Command(name, arg...)
+
+	return cmd.Output()
+}

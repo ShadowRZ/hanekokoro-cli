@@ -7,7 +7,31 @@ import (
 	"strings"
 
 	"github.com/ShadowRZ/hanekokoro-cli/internal/format"
+	"github.com/ShadowRZ/hanekokoro-cli/internal/utils"
 )
+
+const (
+	RUN_CURRENT_SYSTEM = "/run/current-system"
+)
+
+// Run dix, comparing /run/current-system and new outPath, only if they're not the same path.
+func RunDix(outPath string) error {
+	oldPath, err := os.Readlink(RUN_CURRENT_SYSTEM)
+	if err != nil {
+		return err
+	}
+
+	if oldPath == outPath {
+		return nil
+	}
+
+	dixExec, err := exec.LookPath("dix")
+	if err != nil {
+		return err
+	}
+
+	return utils.RunCmd(dixExec, oldPath, outPath)
+}
 
 func Build(
 	path_ string,

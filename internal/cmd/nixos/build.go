@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"os/exec"
 
 	"github.com/ShadowRZ/hanekokoro-cli/internal/format"
 	"github.com/ShadowRZ/hanekokoro-cli/internal/pinning"
@@ -27,33 +26,7 @@ func NixOSBuild() {
 		format.Errorf("%s", err)
 	}
 
-	RunDix(outPath)
-}
-
-// Run dix, comparing /run/current-system and new outPath, only if they're not the same path.
-func RunDix(outPath string) error {
-	oldPath, err := os.Readlink("/run/current-system")
-	if err != nil {
-		return err
-	}
-
-	if oldPath == outPath {
-		return nil
-	}
-
-	dixExec, err := exec.LookPath("dix")
-	if err != nil {
-		return err
-	}
-
-	cmd := exec.Command(dixExec, oldPath, outPath)
-	cmd.Stdout = os.Stdout
-	cmd.Stdin = os.Stdin
-
-	cmd.Start()
-	cmd.Wait()
-
-	return nil
+	runnix.RunDix(outPath)
 }
 
 var buildError = errors.New("Build failure")
