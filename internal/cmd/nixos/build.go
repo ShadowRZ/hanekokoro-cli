@@ -11,7 +11,7 @@ import (
 	"github.com/ShadowRZ/hanekokoro-cli/internal/utils"
 )
 
-func NixOSBuild() {
+func NixOSBuild(noNom bool) {
 	root, err := utils.RootDir()
 	if err != nil {
 		format.Errorf("Failed to determine root directory: %s", err)
@@ -19,11 +19,12 @@ func NixOSBuild() {
 
 	ty := pinning.CheckPinning(root)
 
-	outPath, err := BuildConfiguration(root, ty)
+	outPath, err := BuildConfiguration(root, ty, noNom)
 	if err != nil && errors.Is(err, buildError) {
 		return
 	} else if err != nil {
 		format.Errorf("%s", err)
+		return
 	}
 
 	runnix.RunDix(outPath)
@@ -31,7 +32,7 @@ func NixOSBuild() {
 
 var buildError = errors.New("Build failure")
 
-func BuildConfiguration(root string, ty pinning.Pinning) (string, error) {
+func BuildConfiguration(root string, ty pinning.Pinning, noNom bool) (string, error) {
 	switch ty {
 	case pinning.Flake:
 		hostname, err := os.Hostname()
@@ -41,7 +42,7 @@ func BuildConfiguration(root string, ty pinning.Pinning) (string, error) {
 		outPath, err := runnix.BuildFlake(
 			root,
 			fmt.Sprintf("nixosConfigurations.\"%s\".config.system.build.toplevel", hostname),
-			true,
+			noNom,
 		)
 		if err != nil {
 			return "", fmt.Errorf("Failed to build configuration: %w", err)

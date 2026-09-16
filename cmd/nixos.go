@@ -5,6 +5,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var noNom bool
+
 // nixosCmd represents the nixos command
 var nixosCmd = &cobra.Command{
 	Use:   "nixos",
@@ -27,13 +29,15 @@ How to build a NixOS configuration is automatically determined:
 
 Other methods comming soon!`,
 	Run: func(cmd *cobra.Command, args []string) {
-		nixos.NixOSBuild()
+		nixos.NixOSBuild(noNom)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(nixosCmd)
 	nixosCmd.AddCommand(nixosBuildCmd)
+
+	nixosBuildCmd.Flags().BoolVar(&noNom, "no-nom", false, "Don't use nix-output-monitor for the build process")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

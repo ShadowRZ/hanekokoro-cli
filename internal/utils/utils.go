@@ -44,9 +44,11 @@ func RunCmd(name string, arg ...string) error {
 	return cmd.Wait()
 }
 
-// Run a command, capturing stdout.
+// Run a command, only capturing stdout.
 func RunCmdCaptured(name string, arg ...string) (stdout []byte, err error) {
 	cmd := exec.Command(name, arg...)
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 
 	return cmd.Output()
 }

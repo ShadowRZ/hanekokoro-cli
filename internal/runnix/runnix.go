@@ -36,11 +36,11 @@ func RunDix(outPath string) error {
 func Build(
 	path_ string,
 	attr string,
-	nom bool,
+	noNom bool,
 	arg ...string,
 ) (path string, err error) {
 	var nixExec = "nix-build"
-	if nom {
+	if !noNom {
 		nomExec, err := exec.LookPath("nom-build")
 		if err != nil {
 			format.Warningf("Failed to find nom-build, using nix-build instead")
@@ -67,11 +67,11 @@ func Build(
 func BuildFlake(
 	path_ string,
 	attr string,
-	nom bool,
+	noNom bool,
 	arg ...string,
 ) (path string, err error) {
 	var nixExec = "nix"
-	if nom {
+	if !noNom {
 		nomExec, err := exec.LookPath("nom")
 		if err != nil {
 			format.Warningf("Failed to find nom, using nix instead")
@@ -83,7 +83,7 @@ func BuildFlake(
 	var finalArgs = []string{}
 
 	// This indirection is required because nix-output-monitor may not accept --extra-experimental-features
-	if !nom {
+	if !noNom {
 		finalArgs = append(
 			finalArgs,
 			"--extra-experimental-features",
