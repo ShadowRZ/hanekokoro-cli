@@ -1,0 +1,10 @@
+[package]
+name = "hkk"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+clap = { version = "4.6.7", features = ["derive"] }
+owo-colors = { version = "4.4.0", features = ["supports-colors"] }
+ureq = "3.4.2"
