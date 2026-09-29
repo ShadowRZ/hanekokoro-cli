@@ -5,6 +5,7 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-clap = { version = "4.6.7", features = ["derive"] }
+clap.workspace = true
+nix = { version = "0.31.3", default-features = false, features = ["hostname"] }
 owo-colors = { version = "4.4.0", features = ["supports-colors"] }
 ureq = "3.4.2"
