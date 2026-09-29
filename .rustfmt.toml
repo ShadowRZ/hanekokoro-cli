@@ -1,0 +1,8 @@
+max_width = 120
+tab_spaces = 4
+match_block_trailing_comma = true
+fn_params_layout = "Vertical"
+imports_granularity = "Crate"
+group_imports = "StdExternalCrate"
+wrap_comments = true
+reorder_impl_items = true

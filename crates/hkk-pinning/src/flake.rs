@@ -143,7 +143,7 @@ impl From<FlakeLock> for PinnedRefs {
                     forge: Codeforge::GitHub,
                     owner,
                     repo,
-                    git_ref: git_ref,
+                    git_ref,
                     domain: host,
                 },
                 OriginalRef::GitLab {
@@ -156,7 +156,7 @@ impl From<FlakeLock> for PinnedRefs {
                     forge: Codeforge::GitLab,
                     owner,
                     repo,
-                    git_ref: git_ref,
+                    git_ref,
                     domain: host,
                 },
                 OriginalRef::SourceHut {
@@ -169,7 +169,7 @@ impl From<FlakeLock> for PinnedRefs {
                     forge: Codeforge::Sourcehut,
                     owner,
                     repo,
-                    git_ref: git_ref,
+                    git_ref,
                     domain: host,
                 },
                 OriginalRef::Tarball { url, .. } => crate::OriginalRef::Tarball { url },

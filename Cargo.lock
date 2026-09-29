@@ -191,6 +191,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "hkk-installable"
+version = "0.1.0"
+dependencies = [
+ "thiserror",
+]
+
+[[package]]
 name = "hkk-pinning"
 version = "0.1.0"
 dependencies = [
