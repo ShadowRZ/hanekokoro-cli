@@ -1,0 +1,9 @@
+[package]
+name = "hkk-nixos"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+clap.workspace = true
+hkk-installable.workspace = true

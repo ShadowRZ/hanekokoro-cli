@@ -9,4 +9,11 @@ license = "GPL-3.0-or-later"
 
 [workspace.dependencies]
 clap = { version = "4.6.7", features = ["cargo", "derive"] }
+owo-colors = { version = "4.4.0", features = ["supports-colors"] }
 thiserror = "2.0.21"
+
+# Workspace
+hkk-arguments = { path = "crates/hkk-arguments" }
+hkk-installable = { path = "crates/hkk-installable" }
+hkk-nixos = { path = "crates/hkk-nixos" }
+hkk-pinning = { path = "crates/hkk-pinning" }

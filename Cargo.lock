@@ -198,9 +198,19 @@ name = "hkk"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "hkk-nixos",
  "nix",
  "owo-colors",
  "ureq",
+]
+
+[[package]]
+name = "hkk-arguments"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "hkk-installable",
+ "owo-colors",
 ]
 
 [[package]]
@@ -208,6 +218,14 @@ name = "hkk-installable"
 version = "0.1.0"
 dependencies = [
  "thiserror",
+]
+
+[[package]]
+name = "hkk-nixos"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "hkk-installable",
 ]
 
 [[package]]

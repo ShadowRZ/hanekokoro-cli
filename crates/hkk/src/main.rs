@@ -1,6 +1,6 @@
 mod cli;
 
-use clap::Parser;
+use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
 #[command(
@@ -17,7 +17,20 @@ use clap::Parser;
 {all-args}{after-help}
 "
 )]
-struct Cli {}
+struct Cli {
+    #[command(subcommand)]
+    command: Command,
+}
+
+#[derive(Debug, Subcommand)]
+enum Command {
+    #[command(subcommand, name = "nixos")]
+    /// NixOS related functions
+    ///
+    /// Implements some functions that mostly built around, or with the idea of
+    /// nixos-rebuild in mind.
+    NixOS(hkk_nixos::NixOSCommand),
+}
 
 fn main() {
     let args = Cli::parse();

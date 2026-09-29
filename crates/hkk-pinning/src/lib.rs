@@ -4,6 +4,12 @@ use thiserror::Error;
 
 pub mod flake;
 
+/// A Pinning method.
+pub enum PinningMethod {
+    /// Nix flake.
+    Flake,
+}
+
 pub enum Codeforge {
     GitHub,
     GitLab,
@@ -142,4 +148,14 @@ pub fn pinned_refs(root: PathBuf) -> Result<Option<PinnedRefs>, Error> {
     }
 
     Ok(None)
+}
+
+pub fn pinning_type(root: PathBuf) -> Option<PinningMethod> {
+    let mut flake_lock = root.clone();
+    flake_lock.push("flake.lock");
+    if flake_lock.exists() {
+        return Some(PinningMethod::Flake);
+    }
+
+    return None;
 }

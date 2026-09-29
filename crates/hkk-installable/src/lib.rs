@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{path::PathBuf, str::FromStr};
 
 use thiserror::Error;
 
@@ -49,11 +49,11 @@ pub enum Installable {
         attrpath: AttrPath,
     },
     /// A store path.
-    Store(String),
+    Store(PathBuf),
     /// A Nix file.
     File {
         /// Nix file or directory with `default.nix`.
-        path: String,
+        path: PathBuf,
         /// Optional attrpath to eval.
         ///
         /// If empty, assumes the [`path`][Self::File::path] itself
@@ -123,22 +123,15 @@ impl FromStr for AttrPath {
     }
 }
 
-pub fn parse_flake_output(s: &str) -> Result<Installable, ParseError> {
+pub fn parse_flakeref(s: &str) -> Result<(String, AttrPath), ParseError> {
     let (flakeref, attrpath) = s.split_once('#').unwrap_or((s, ""));
 
-    if flakeref.starts_with("/nix/store/") {
-        return Ok(Installable::Store(flakeref.to_string()));
-    }
-
-    Ok(Installable::Flake {
-        flakeref: flakeref.to_string(),
-        attrpath: attrpath.parse()?,
-    })
+    Ok((flakeref.to_string(), attrpath.parse()?))
 }
 
 #[cfg(test)]
 mod test {
-    use super::{AttrPath, Installable};
+    use super::AttrPath;
 
     #[test]
     fn attrpath_basic() {
@@ -213,28 +206,16 @@ mod test {
     #[test]
     fn flake_installable_basic() {
         let flake_attr = "nixpkgs#hello";
-        let parsed: Installable = super::parse_flake_output(flake_attr).unwrap();
+        let parsed = super::parse_flakeref(flake_attr).unwrap();
 
-        assert_eq!(
-            parsed,
-            Installable::Flake {
-                flakeref: "nixpkgs".to_string(),
-                attrpath: AttrPath(vec!["hello".to_string()])
-            }
-        );
+        assert_eq!(parsed, ("nixpkgs".to_string(), AttrPath(vec!["hello".to_string()])));
     }
 
     #[test]
     fn flake_installable_without_attrpath() {
         let flake_attr = ".";
-        let parsed: Installable = super::parse_flake_output(flake_attr).unwrap();
+        let parsed = super::parse_flakeref(flake_attr).unwrap();
 
-        assert_eq!(
-            parsed,
-            Installable::Flake {
-                flakeref: ".".to_string(),
-                attrpath: AttrPath(vec![])
-            }
-        );
+        assert_eq!(parsed, (".".to_string(), AttrPath(vec![])));
     }
 }

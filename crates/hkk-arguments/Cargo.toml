@@ -1,14 +1,12 @@
 [package]
-name = "hkk"
+name = "hkk-arguments"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 
 [dependencies]
 clap.workspace = true
-nix = { version = "0.31.3", default-features = false, features = ["hostname"] }
 owo-colors.workspace = true
-ureq = "3.4.2"
 
 # Workspace
-hkk-nixos.workspace = true
+hkk-installable.workspace = true
