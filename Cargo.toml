@@ -17,3 +17,4 @@ hkk-arguments = { path = "crates/hkk-arguments" }
 hkk-installable = { path = "crates/hkk-installable" }
 hkk-nixos = { path = "crates/hkk-nixos" }
 hkk-pinning = { path = "crates/hkk-pinning" }
+hkk-utils = { path = "crates/hkk-utils" }
