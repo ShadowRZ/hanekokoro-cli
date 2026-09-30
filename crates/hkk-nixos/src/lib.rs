@@ -27,7 +27,7 @@ pub struct CommonBuildArgs {
     installable: InstallableArgs,
 }
 
-pub fn run(args: NixOSArgs) {
+pub fn run(args: NixOSArgs) -> color_eyre::Result<()> {
     match args.command {
         NixOSCommand::Build(args) => self::build::build(args),
     }

@@ -3,7 +3,7 @@ use hkk_installable::AttrPath;
 
 use crate::NixOSBuildArgs;
 
-pub(super) fn build(args: NixOSBuildArgs) {
+pub(super) fn build(args: NixOSBuildArgs) -> color_eyre::Result<()> {
     use hkk_installable::Installable;
 
     let installable_args = args.common.installable;
@@ -26,7 +26,9 @@ pub(super) fn build(args: NixOSBuildArgs) {
             _ => installable,
         },
         InstallableArgs::Unspecified => {
-            let hostname = nix::unistd::gethostname().unwrap().into_string().unwrap();
+            let hostname = nix::unistd::gethostname()?
+                .into_string()
+                .map_err(|_| color_eyre::eyre::eyre!("OS Hostname is not UTF-8"))?;
             Installable::Flake {
                 flakeref: ".".to_string(),
                 attrpath: AttrPath(vec![
@@ -43,7 +45,7 @@ pub(super) fn build(args: NixOSBuildArgs) {
 
     match installable {
         Installable::Flake { flakeref, attrpath } => {
-            let attrpath = attrpath.render().unwrap();
+            let attrpath = attrpath.render()?;
             std::process::Command::new("nix")
                 .args([
                     "--extra-experimental-features",
@@ -51,9 +53,10 @@ pub(super) fn build(args: NixOSBuildArgs) {
                     "build",
                     &format!("{flakeref}#{attrpath}"),
                 ])
-                .spawn()
-                .unwrap();
+                .spawn()?;
         },
         _ => {},
-    }
+    };
+
+    Ok(())
 }

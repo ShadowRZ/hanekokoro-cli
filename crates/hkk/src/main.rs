@@ -32,7 +32,9 @@ enum Command {
     NixOS(hkk_nixos::NixOSArgs),
 }
 
-fn main() {
+fn main() -> color_eyre::Result<()> {
+    color_eyre::install()?;
+
     let args = Cli::parse();
     match args.command {
         Command::NixOS(args) => hkk_nixos::run(args),
