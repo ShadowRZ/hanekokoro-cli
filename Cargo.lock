@@ -302,6 +302,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "hkk-termlink"
+version = "0.1.0"
+dependencies = [
+ "supports-hyperlinks",
+ "terminal-link",
+]
+
+[[package]]
 name = "hkk-utils"
 version = "0.1.0"
 
@@ -613,6 +621,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "supports-hyperlinks"
+version = "3.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e396b6523b11ccb83120b115a0b7366de372751aa6edf19844dfb13a6af97e91"
+
+[[package]]
 name = "syn"
 version = "3.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -622,6 +636,12 @@ dependencies = [
  "quote",
  "unicode-ident",
 ]
+
+[[package]]
+name = "terminal-link"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "253bcead4f3aa96243b0f8fa46f9010e87ca23bd5d0c723d474ff1d2417bbdf8"
 
 [[package]]
 name = "thiserror"

@@ -1,0 +1,9 @@
+[package]
+name = "hkk-termlink"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+supports-hyperlinks = "3.2.0"
+terminal-link = "0.1.0"
