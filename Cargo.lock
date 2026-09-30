@@ -199,7 +199,6 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "hkk-nixos",
- "nix",
  "owo-colors",
  "ureq",
 ]
@@ -225,7 +224,9 @@ name = "hkk-nixos"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "hkk-arguments",
  "hkk-installable",
+ "nix",
 ]
 
 [[package]]
@@ -237,6 +238,10 @@ dependencies = [
  "serde_path_to_error",
  "thiserror",
 ]
+
+[[package]]
+name = "hkk-utils"
+version = "0.1.0"
 
 [[package]]
 name = "http"

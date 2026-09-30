@@ -24,14 +24,17 @@ struct Cli {
 
 #[derive(Debug, Subcommand)]
 enum Command {
-    #[command(subcommand, name = "nixos")]
+    #[command(name = "nixos")]
     /// NixOS related functions
     ///
     /// Implements some functions that mostly built around, or with the idea of
     /// nixos-rebuild in mind.
-    NixOS(hkk_nixos::NixOSCommand),
+    NixOS(hkk_nixos::NixOSArgs),
 }
 
 fn main() {
     let args = Cli::parse();
+    match args.command {
+        Command::NixOS(args) => hkk_nixos::run(args),
+    }
 }

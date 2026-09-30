@@ -6,4 +6,8 @@ license.workspace = true
 
 [dependencies]
 clap.workspace = true
+nix = { version = "0.31.3", default-features = false, features = ["hostname"] }
+
+# Workspace
+hkk-arguments.workspace = true
 hkk-installable.workspace = true
