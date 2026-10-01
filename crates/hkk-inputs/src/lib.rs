@@ -58,6 +58,8 @@ pub fn run() -> color_eyre::Result<()> {
 
             println!(" {} {}", "->".bold(), resolved_str)
         }
+    } else {
+        println!("{} {}.", "No pinning method detected in".bold(), root.display().bold());
     }
 
     Ok(())
