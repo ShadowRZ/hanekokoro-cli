@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, path::PathBuf};
+use std::{collections::BTreeMap, path::Path};
 
 use thiserror::Error;
 
@@ -136,9 +136,10 @@ pub enum Error {
     ),
 }
 
-pub fn pinned_refs(root: PathBuf) -> Result<Option<PinnedRefs>, Error> {
-    let mut flake_lock = root.clone();
+pub fn pinned_refs<P: AsRef<Path>>(root: P) -> Result<Option<PinnedRefs>, Error> {
+    let mut flake_lock = root.as_ref().to_path_buf();
     flake_lock.push("flake.lock");
+
     if std::fs::exists(&flake_lock)? {
         use crate::flake::FlakeLock;
 
@@ -150,8 +151,8 @@ pub fn pinned_refs(root: PathBuf) -> Result<Option<PinnedRefs>, Error> {
     Ok(None)
 }
 
-pub fn pinning_type(root: PathBuf) -> Option<PinningMethod> {
-    let mut flake_lock = root.clone();
+pub fn pinning_type<P: AsRef<Path>>(root: P) -> Option<PinningMethod> {
+    let mut flake_lock = root.as_ref().to_path_buf();
     flake_lock.push("flake.lock");
     if flake_lock.exists() {
         return Some(PinningMethod::Flake);

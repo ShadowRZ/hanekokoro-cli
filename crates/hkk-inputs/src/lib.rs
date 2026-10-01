@@ -1,10 +1,11 @@
+use owo_colors::OwoColorize as _;
+
 pub fn run() -> color_eyre::Result<()> {
     let root = hkk_utils::root_dir()?;
 
-    if let Some(pinned_refs) = hkk_pinning::pinned_refs(root)? {
+    if let Some(pinned_refs) = hkk_pinning::pinned_refs(&root)? {
         use hkk_pinning::{Codeforge, ResolvedRef};
         use hkk_termlink::TerminalLink as _;
-        use owo_colors::OwoColorize;
 
         println!("{}", "Inputs".bold());
         for (name, (_, resolved_ref)) in pinned_refs.inputs {
