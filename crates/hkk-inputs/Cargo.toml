@@ -1,0 +1,15 @@
+[package]
+name = "hkk-inputs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+clap.workspace = true
+color-eyre.workspace = true
+owo-colors.workspace = true
+
+# Workspace
+hkk-pinning.workspace = true
+hkk-termlink.workspace = true
+hkk-utils.workspace = true

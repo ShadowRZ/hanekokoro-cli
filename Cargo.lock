@@ -274,6 +274,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "hkk-inputs"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "color-eyre",
+ "hkk-pinning",
+ "hkk-termlink",
+ "hkk-utils",
+ "owo-colors",
+]
+
+[[package]]
 name = "hkk-installable"
 version = "0.1.0"
 dependencies = [
