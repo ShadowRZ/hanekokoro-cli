@@ -302,6 +302,7 @@ dependencies = [
  "hkk-arguments",
  "hkk-installable",
  "nix",
+ "owo-colors",
 ]
 
 [[package]]
@@ -325,6 +326,9 @@ dependencies = [
 [[package]]
 name = "hkk-utils"
 version = "0.1.0"
+dependencies = [
+ "thiserror",
+]
 
 [[package]]
 name = "http"
