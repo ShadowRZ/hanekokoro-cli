@@ -46,14 +46,27 @@ pub(super) fn build(args: NixOSBuildArgs) -> color_eyre::Result<()> {
     match installable {
         Installable::Flake { flakeref, attrpath } => {
             let attrpath = attrpath.render()?;
-            std::process::Command::new("nix")
+            let status = std::process::Command::new("nix")
                 .args([
                     "--extra-experimental-features",
                     "nix-command flakes",
                     "build",
                     &format!("{flakeref}#{attrpath}"),
                 ])
-                .spawn()?;
+                .status()?;
+
+            if !status.success() {
+                use owo_colors::OwoColorize;
+
+                match status.code() {
+                    Some(code) => eprintln!(
+                        "\n{} {}.",
+                        "Nix command failed with exit code".red().bold(),
+                        code.red().bold()
+                    ),
+                    None => eprintln!("\n{}.", "Nix command terminated with a signal.".red().bold()),
+                };
+            }
         },
         _ => {},
     };

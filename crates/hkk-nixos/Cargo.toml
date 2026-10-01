@@ -8,6 +8,7 @@ license.workspace = true
 clap.workspace = true
 color-eyre.workspace = true
 nix = { version = "0.31.3", default-features = false, features = ["hostname"] }
+owo-colors.workspace = true
 
 # Workspace
 hkk-arguments.workspace = true
