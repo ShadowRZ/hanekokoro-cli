@@ -39,6 +39,7 @@ impl<'de> Deserialize<'de> for Path {
 #[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive]
 pub struct FlakeNode {
+    #[serde(default)]
     pub inputs: BTreeMap<String, Path>,
     pub locked: Option<Locked>,
     pub original: Option<OriginalRef>,

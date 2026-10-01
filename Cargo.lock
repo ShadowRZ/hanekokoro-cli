@@ -259,6 +259,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "color-eyre",
+ "hkk-inputs",
  "hkk-nixos",
  "owo-colors",
  "ureq",

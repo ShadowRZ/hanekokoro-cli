@@ -7,20 +7,20 @@ pub fn run() -> color_eyre::Result<()> {
         use owo_colors::OwoColorize;
 
         println!("{}", "Inputs".bold());
-        for (name, (original_ref, resolved_ref)) in pinned_refs.inputs {
+        for (name, (_, resolved_ref)) in pinned_refs.inputs {
             print!("{}", "* ".bold());
             println!("{}", name.bold());
 
             let resolved_str = {
                 match resolved_ref {
-                    ResolvedRef::Tarball { url, hash } => url,
+                    ResolvedRef::Tarball { url, .. } => url,
                     ResolvedRef::Codeforge {
                         forge,
                         owner,
                         repo,
                         git_ref,
                         domain,
-                        hash,
+                        ..
                     } => {
                         let forge_ref = match forge {
                             Codeforge::GitHub => "github",
@@ -39,18 +39,23 @@ pub fn run() -> color_eyre::Result<()> {
                             .to_string()
                         });
 
+                        let terminal_link = match forge {
+                            Codeforge::GitHub | Codeforge::Forgejo => {
+                                format!("https://{domain}/{owner}/{repo}/commit/{git_ref}")
+                            },
+                            Codeforge::GitLab => format!("https://{domain}/{owner}/{repo}/-/commit/{git_ref}"),
+                            Codeforge::Sourcehut => todo!(),
+                        };
+
                         format!("{forge_ref}:{owner}/{repo}/{git_ref}")
-                            .terminal_link("")
+                            .terminal_link(&terminal_link)
                             .to_string()
                     },
-                    ResolvedRef::Git {
-                        url,
-                        git_ref,
-                        submodules,
-                        lfs,
-                    } => todo!(),
-                };
+                    ResolvedRef::Git { url, .. } => url,
+                }
             };
+
+            println!(" {} {}", "->".bold(), resolved_str)
         }
     }
 

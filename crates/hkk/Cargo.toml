@@ -11,4 +11,5 @@ owo-colors.workspace = true
 ureq = "3.4.2"
 
 # Workspace
+hkk-inputs.workspace = true
 hkk-nixos.workspace = true

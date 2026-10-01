@@ -30,6 +30,14 @@ enum Command {
     /// Implements some functions that mostly built around, or with the idea of
     /// nixos-rebuild in mind.
     NixOS(hkk_nixos::NixOSArgs),
+    /// Show all inputs for the current Nix project.
+    ///
+    /// This command support the following mechanisms for input pinning:
+    /// * Nix Flakes (flake.nix, flake.lock)
+    ///
+    /// Other types comming soon!
+    #[command(verbatim_doc_comment)]
+    Inputs,
 }
 
 fn main() -> color_eyre::Result<()> {
@@ -38,5 +46,6 @@ fn main() -> color_eyre::Result<()> {
     let args = Cli::parse();
     match args.command {
         Command::NixOS(args) => hkk_nixos::run(args),
+        Command::Inputs => hkk_inputs::run(),
     }
 }
