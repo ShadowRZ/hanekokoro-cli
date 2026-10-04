@@ -8,6 +8,10 @@
   ],
   "packageRules": [
     {
+      "matchManagers": ["*"],
+      "commitMessagePrefix": "deps: "
+    },
+    {
       "matchManagers": ["nix"],
       "commitMessagePrefix": "flake: ",
     }
