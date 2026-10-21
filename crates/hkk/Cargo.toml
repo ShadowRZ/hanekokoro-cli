@@ -8,7 +8,7 @@ license.workspace = true
 clap.workspace = true
 color-eyre.workspace = true
 owo-colors.workspace = true
-ureq = "3.4.2"
+ureq = "3.5.0"
 
 # Workspace
 hkk-inputs.workspace = true
