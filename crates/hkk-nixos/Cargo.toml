@@ -7,7 +7,7 @@ license.workspace = true
 [dependencies]
 clap.workspace = true
 color-eyre.workspace = true
-nix = { version = "0.31.3", default-features = false, features = ["hostname"] }
+nix = { version = "0.32.0", default-features = false, features = ["hostname"] }
 owo-colors.workspace = true
 
 # Workspace
